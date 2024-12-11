@@ -7,13 +7,13 @@ import { HomePageComponent } from './shared/home-page/home-page.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { AceptarTerminosComponent } from "./aceptar-terminos/aceptar-terminos.component";
 import { RestablecerContrasenaComponent } from './restablecer-contrasena/restablecer-contrasena.component';
-import { DashBoardComponent } from './Dash/dash-board/dash-board.component';
 import { LoginComponent } from "./login/login.component";
 import { HttpClientModule } from '@angular/common/http';
 import { RegistroComponent } from './registro/registro.component';
 import { QuienesSOmos01Component } from './QuienesSomos/quienes-somos01/quienes-somos01.component';
 import { FacturaComponent } from './factura/factura.component';
 import { ClienteComponent } from './cliente/cliente.component';
+import { DashBoardComponent } from './Dash_backup/dash-board/dash-board.component';
 
 @Component({
     selector: 'app-root',

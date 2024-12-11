@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-factura',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './factura.component.html',
   styleUrls: ['./factura.component.css']
 })
 export class FacturaComponent {
   facturaForm: FormGroup;
+facturaSeleccionada: any;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.facturaForm = this.fb.group({

@@ -1,36 +1,46 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';  // Importa CommonModule
-import { FacturaComponent } from '../factura/factura.component';
+import { CommonModule } from '@angular/common'; // Para el uso de directivas como *ngIf y *ngFor
+import { ClienteService } from '../services/client.service';
 
 @Component({
   selector: 'app-cliente',
   templateUrl: './cliente.component.html',
   styleUrls: ['./cliente.component.css'],
   standalone: true,
-  imports: [CommonModule, FacturaComponent],  // Agrega CommonModule aquí
+  imports: [CommonModule]
 })
 export class ClienteComponent implements OnInit {
-  clientes: any[] = [];
-  clienteSeleccionado: any = null;
+  clientes: any[] = [];  // Asegurarse de que clientes es un array
+  loading = true;
+  errorMessage: string = '';
+  cliente: any;  // Almacena los datos del cliente actual, si solo uno
 
-  constructor(private http: HttpClient) {}
+  constructor(private clienteService: ClienteService) {}
 
-  ngOnInit() {
-    this.cargarClientes();
+  ngOnInit(): void {
+    this.loadClientes();  // Llamar a la función para cargar los clientes
   }
 
-  cargarClientes() {
-    this.http.get<any[]>('http://localhost:5068/UsuarioAdministrador/Cliente')
-      .subscribe(data => {
-        this.clientes = data;
-      }, error => {
-        console.error('Error al cargar clientes:', error);
-      });
+  loadClientes(): void {
+    this.clienteService.getClients().subscribe({
+      next: (data: any[]) => {
+        if (Array.isArray(data)) {
+          this.clientes = data;  // Si es un array, asignamos a clientes
+        } else {
+          this.cliente = data;  // Si es un solo cliente, asignamos a cliente
+        }
+        this.loading = false;  // Dejamos de cargar
+      },
+      error: (err) => {
+        this.errorMessage = 'Error al cargar clientes.';
+        console.error('Error al obtener clientes:', err);
+        this.loading = false;  // Dejamos de cargar
+      }
+    });
   }
 
-  seleccionarCliente(cliente: any) {
-    this.clienteSeleccionado = cliente;
+  selectClient(cliente: any): void {
+    this.clienteService.seleccionarCliente(cliente);  // Función para manejar el cliente seleccionado
+    console.log('Cliente seleccionado:', cliente);
   }
 }
-

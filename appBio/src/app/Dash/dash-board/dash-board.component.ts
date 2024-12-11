@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../servicios/auth.service';
-import { MenuItem } from '../../models/menu-item.interface';
-import { MENU_ITEMS } from '../../config/menu-items.config';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatDialog } from '@angular/material/dialog';
-import { CambiarCredencialesComponent } from '../../components/cambiar-credenciales/cambiar-credenciales.component';
-import { FotoPerfilComponent } from '../../components/foto-perfil/foto-perfil.component';
+import { ClienteService } from '../../services/client.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { FotoPerfilComponent } from '../../components/foto-perfil/foto-perfil.component';
+import { CambiarCredencialesComponent } from '../../components/cambiar-credenciales/cambiar-credenciales.component';
+import { MENU_ITEMS } from '../../config/menu-items.config';
 
 @Component({
   selector: 'app-dash-board',
@@ -20,12 +19,14 @@ import { Subscription } from 'rxjs';
 export class DashBoardComponent implements OnInit, OnDestroy {
   userRol: string | null = '';
   username: string | null = '';
-  menuItems: MenuItem[] = [];
+  menuItems: any[] = [];
+  clients: any[] = [];
   private isBrowser: boolean;
   private subscriptions: Subscription[] = [];
 
   constructor(
     private authService: AuthService,
+    private clientService: ClienteService,
     private dialog: MatDialog,
     private router: Router,
     @Inject(PLATFORM_ID) platformId: Object
@@ -34,37 +35,37 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.isBrowser) {
-      // Verificar si hay sesión activa
-      if (!this.authService.isAuthenticated()) {
-        this.router.navigate(['/login']);
-        return;
-      }
+    if (!this.isBrowser) return;
 
-      const userInfo = this.authService.getUserInfo();
-      this.userRol = userInfo.rol || '';
-      this.username = userInfo.username || '';
-      console.log('UserInfo loaded:', { username: this.username, rol: this.userRol });
-
-      // Filtrar elementos del menú según el rol
-      this.updateMenuItems(this.userRol);
-
-      // Suscribirse a cambios en el rol y username
-      this.subscriptions.push(
-        this.authService.userRole$.subscribe(rol => {
-          console.log('Rol updated from service:', rol);
-          this.userRol = rol;
-          this.updateMenuItems(rol || '');
-        })
-      );
-
-      this.subscriptions.push(
-        this.authService.username$.subscribe(username => {
-          console.log('Username updated from service:', username);
-          this.username = username;
-        })
-      );
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login']);
+      return;
     }
+
+    const userInfo = this.authService.getUserInfo();
+    this.userRol = userInfo.rol || '';
+    this.username = userInfo.username || '';
+
+    this.updateMenuItems(this.userRol);
+
+    if (this.userRol === 'Cliente') {
+      this.loadClientData();
+    } else {
+      this.loadAllClients();
+    }
+
+    this.subscriptions.push(
+      this.authService.userRole$.subscribe(rol => {
+        this.userRol = rol;
+        this.updateMenuItems(rol);
+      })
+    );
+
+    this.subscriptions.push(
+      this.authService.username$.subscribe(username => {
+        this.username = username;
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -77,54 +78,44 @@ export class DashBoardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.menuItems = MENU_ITEMS.filter(item => 
-      item.roles.includes(userRol)
-    ).map(item => ({
-      ...item,
-      active: this.router.url === item.route
-    }));
+    this.menuItems = MENU_ITEMS.filter(item => item.roles.includes(userRol));
   }
 
-  setActiveMenuItem(route: string) {
-    this.menuItems = this.menuItems.map(item => ({
-      ...item,
-      active: item.route === route
-    }));
+  private loadClientData() {
+    this.clientService.getClientByDni().subscribe({
+      next: data => this.clients = [data],
+      error: err => console.error('Error loading client data:', err)
+    });
+  }
+
+  private loadAllClients() {
+    this.clientService.getClients().subscribe({
+      next: data => this.clients = data,
+      error: err => console.error('Error loading clients:', err)
+    });
   }
 
   abrirModalCredenciales() {
-    try {
-      const dialogRef = this.dialog.open(CambiarCredencialesComponent, {
-        width: '400px',
-        disableClose: true
-      });
+    const dialogRef = this.dialog.open(CambiarCredencialesComponent, {
+      width: '400px',
+      disableClose: true
+    });
 
-      this.subscriptions.push(
-        dialogRef.afterClosed().subscribe({
-          next: (result) => {
-            if (result) {
-              console.log('Credenciales actualizadas con éxito');
-            }
-          },
-          error: (error) => {
-            console.error('Error al cerrar el diálogo:', error);
-          }
-        })
-      );
-    } catch (error) {
-      console.error('Error al abrir el diálogo:', error);
-    }
+    this.subscriptions.push(
+      dialogRef.afterClosed().subscribe({
+        next: result => {
+          if (result) console.log('Credenciales actualizadas con éxito');
+        },
+        error: err => console.error('Error al cerrar el diálogo:', err)
+      })
+    );
   }
 
   logout() {
     this.authService.logout().subscribe({
-      next: () => {
-        console.log('Logout exitoso');
-        this.router.navigate(['/login']);
-      },
-      error: (error) => {
-        console.error('Error en logout:', error);
-        // Aún así, intentamos navegar al login
+      next: () => this.router.navigate(['/login']),
+      error: err => {
+        console.error('Error during logout:', err);
         this.router.navigate(['/login']);
       }
     });

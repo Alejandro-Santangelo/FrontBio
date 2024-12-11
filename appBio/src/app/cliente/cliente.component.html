@@ -1,7 +1,21 @@
-<!-- cliente.component.html -->
-<div *ngFor="let cliente of clientes" (click)="seleccionarCliente(cliente)">
-  <p>{{ cliente.nombre }} {{ cliente.apellido }}</p>
-</div>
+<div class="clientes-container">
+  <h1>Lista de Clientes</h1>
 
-<!-- Mostrar el componente FacturaComponent solo si hay un cliente seleccionado -->
-<app-factura *ngIf="clienteSeleccionado" [clienteSeleccionado]="clienteSeleccionado"></app-factura>
+  <!-- Mostrar mensaje de carga mientras se esperan los clientes -->
+  <div *ngIf="loading" class="loading">Cargando clientes...</div>
+
+  <!-- Mostrar mensaje de error si no se pudieron cargar los clientes -->
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <!-- Mostrar lista de clientes si hay clientes disponibles -->
+  <ul *ngIf="cliente?.length > 0" class="client-list">
+    <li *ngFor="let cliente of cliente" class="client-item" (click)="selectClient(cliente)">
+      {{ cliente.nombre }} - {{ cliente.dni }}
+    </li>
+  </ul>
+
+  <!-- Mostrar mensaje cuando no hay clientes disponibles -->
+  <div *ngIf="!loading && clientes.length === 0" class="no-clients">
+    No hay clientes disponibles.
+  </div>
+</div>

@@ -7,14 +7,14 @@
         <h1>Empresa BIOGAS S.R.L</h1>
         <p><strong>CUIT:</strong> 30-12345678-9</p>
         <p><strong>Dirección:</strong> Avenida Principal 123</p>
-        <p><strong>Ciudad:</strong> Cordoba, CP 5100</p>
+        <p><strong>Ciudad:</strong> Córdoba, CP 5100</p>
       </div>
     </div>
     <div class="factura-info">
       <h1>FACTURA</h1>
       <p><strong>Número:</strong> {{ facturaSeleccionada?.numeroFactura }}</p>
       <p><strong>Fecha de Emisión:</strong> {{ facturaSeleccionada?.fechaEmision | date }}</p>
-      <p><strong>Fecha de Vencimiento:</strong> {{ facturaSeleccionada?.proximoVencimiento | date }}</p>
+      <p><strong>Fecha de Vencimiento:</strong> {{ facturaSeleccionada?.fechaVencimiento | date }}</p>
     </div>
   </div>
 
@@ -37,7 +37,7 @@
   <!-- Línea divisoria -->
   <hr />
 
-  <!-- Descripción de Consumos -->
+  <!-- Detalle de Consumos -->
   <div class="detalle-factura">
     <table>
       <thead>
@@ -70,8 +70,6 @@
 
   <!-- Total -->
   <div class="total">
-    <div class="total-pagar">
-      <h3>Total a Pagar: {{ facturaSeleccionada?.consumoTotal * facturaSeleccionada?.precioUnitario | currency }}</h3>
-    </div>
+    <h3>Total a Pagar: {{ facturaSeleccionada?.consumoTotal * facturaSeleccionada?.precioUnitario | currency }}</h3>
   </div>
 </div>

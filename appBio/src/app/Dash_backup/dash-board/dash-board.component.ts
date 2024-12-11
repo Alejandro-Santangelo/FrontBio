@@ -24,19 +24,19 @@ export class DashBoardComponent implements OnInit {
   ngOnInit() {
     if (this.isBrowser) {
       const userInfo = this.authService.getUserInfo();
-      this.userRole = userInfo.role;
-      this.username = userInfo.username;
+      this.userRole = userInfo.role|| '';
+      this.username = userInfo.username|| '';
       console.log('UserInfo loaded:', { username: this.username, role: this.userRole });
 
       // Suscribirse a cambios en el rol y username
       this.authService.userRole$.subscribe(role => {
         console.log('Role updated from service:', role);
-        this.userRole = role;
+        this.userRole = role|| '';
       });
 
       this.authService.username$.subscribe(username => {
         console.log('Username updated from service:', username);
-        this.username = username;
+        this.username = username|| '';
       });
     }
   }

@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { DashBoardComponent } from './Dash/dash-board/dash-board.component';
 import { FacturaComponent } from './factura/factura.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
@@ -9,6 +8,8 @@ import { RegistroComponent } from './registro/registro.component';
 import { HomePageComponent } from './shared/home-page/home-page.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { ClienteComponent } from './cliente/cliente.component'; // Asegúrate de tener este componente
+import { DashBoardComponent } from './Dash/dash-board/dash-board.component';
+
 
 export const routes: Routes = [
   { 
@@ -47,16 +48,14 @@ export const routes: Routes = [
         data: { roles: ['Manager', 'Administracion', 'Tecnico'] }
       },
       {
-        path: 'clientes',
+        path: 'cliente',
         component: ClienteComponent,  // Asegúrate de que el componente esté bien declarado
-        canActivate: [RoleGuard],
-        data: { roles: ['Administracion', 'Manager', 'tecnico'] }
+        
       },
       {
-        path: 'facturas',
+        path: 'factura',
         component: FacturaComponent,  // Asegúrate de que el componente esté bien declarado
-        canActivate: [RoleGuard],
-        data: { roles: ['Administracion', 'Manager', 'tecnico', 'cliente'] }
+        
       }
     ]
   },
