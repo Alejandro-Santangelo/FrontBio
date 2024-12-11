@@ -1,0 +1,7 @@
+<!-- cliente.component.html -->
+<div *ngFor="let cliente of clientes" (click)="seleccionarCliente(cliente)">
+  <p>{{ cliente.nombre }} {{ cliente.apellido }}</p>
+</div>
+
+<!-- Mostrar el componente FacturaComponent solo si hay un cliente seleccionado -->
+<app-factura *ngIf="clienteSeleccionado" [clienteSeleccionado]="clienteSeleccionado"></app-factura>

@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegistroComponent } from './registro/registro.component';
 import { QuienesSOmos01Component } from './QuienesSomos/quienes-somos01/quienes-somos01.component';
 import { FacturaComponent } from './factura/factura.component';
+import { ClienteComponent } from './cliente/cliente.component';
 
 @Component({
     selector: 'app-root',
@@ -32,7 +33,7 @@ import { FacturaComponent } from './factura/factura.component';
         DashBoardComponent,
         QuienesSOmos01Component,
         RestablecerContrasenaComponent,
-        FacturaComponent
+        FacturaComponent,ClienteComponent
     ],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']

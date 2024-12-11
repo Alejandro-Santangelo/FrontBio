@@ -8,6 +8,7 @@ import { QuienesSOmos01Component } from './QuienesSomos/quienes-somos01/quienes-
 import { RegistroComponent } from './registro/registro.component';
 import { HomePageComponent } from './shared/home-page/home-page.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { ClienteComponent } from './cliente/cliente.component'; // Asegúrate de tener este componente
 
 export const routes: Routes = [
   { 
@@ -46,8 +47,16 @@ export const routes: Routes = [
         data: { roles: ['Manager', 'Administracion', 'Tecnico'] }
       },
       {
-        path: 'factura', 
-        component: FacturaComponent // Factura se carga dentro del dashboard
+        path: 'clientes',
+        component: ClienteComponent,  // Asegúrate de que el componente esté bien declarado
+        canActivate: [RoleGuard],
+        data: { roles: ['Administracion', 'Manager', 'tecnico'] }
+      },
+      {
+        path: 'facturas',
+        component: FacturaComponent,  // Asegúrate de que el componente esté bien declarado
+        canActivate: [RoleGuard],
+        data: { roles: ['Administracion', 'Manager', 'tecnico', 'cliente'] }
       }
     ]
   },

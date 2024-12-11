@@ -1,55 +1,41 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { FacturaService } from './factura.servicio';
-import { CommonModule } from '@angular/common'; // Importar CommonModule para los pipes
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-factura',
   standalone: true,
   templateUrl: './factura.component.html',
-  styleUrls: ['./factura.component.css'],
-  imports: [CommonModule]  // Añadir CommonModule aquí
+  styleUrls: ['./factura.component.css']
 })
-export class FacturaComponent implements OnInit {
-  facturas: any[] = []; // Lista de facturas obtenidas del servicio
-  facturaSeleccionada: any | null = null; // Factura seleccionada para ver detalles
+export class FacturaComponent {
+  facturaForm: FormGroup;
 
-  private facturaService = inject(FacturaService);
-
-  ngOnInit(): void {
-    // Cargar facturas al inicializar el componente
-    this.cargarFacturas();
+  constructor(private fb: FormBuilder, private http: HttpClient) {
+    this.facturaForm = this.fb.group({
+      consumoMensual: ['', Validators.required],
+      consumoTotal: ['', Validators.required],
+      fechaEmision: ['', Validators.required],
+      fechaVencimiento: ['', Validators.required]
+    });
   }
 
-  /**
-   * Método para cargar todas las facturas desde el servicio.
-   */
-  cargarFacturas(): void {
-    this.facturaService.obtenerFacturas().subscribe(
-      (data) => {
-        this.facturas = data;
-        console.log('Facturas obtenidas correctamente:', this.facturas);
-      },
-      (error) => {
-        console.error('Error al cargar facturas:', error);
-        alert('Ocurrió un error al cargar las facturas. Inténtalo más tarde.');
-      }
-    );
-  }
+  onSubmit() {
+    if (this.facturaForm.valid) {
+      const facturaData = this.facturaForm.value;
+      const dniCliente = 12345678; // Este debe ser el DNI del cliente logueado
 
-  /**
-   * Método para seleccionar una factura específica por su número.
-   * @param numeroFactura Número de la factura a seleccionar
-   */
-  seleccionarFactura(numeroFactura: number): void {
-    this.facturaService.obtenerFactura(numeroFactura).subscribe(
-      (factura) => {
-        this.facturaSeleccionada = factura;
-        console.log('Factura seleccionada:', this.facturaSeleccionada);
-      },
-      (error) => {
-        console.error(`Error al cargar la factura con número ${numeroFactura}:`, error);
-        alert(`No se pudo cargar la factura con número ${numeroFactura}. Inténtalo más tarde.`);
-      }
-    );
+      // Llamada al backend para cargar la factura
+      this.http.post(`http://localhost:5000/UsuarioAdministrador/Cliente/${dniCliente}/Facturas`, facturaData)
+        .subscribe(response => {
+          console.log('Factura cargada:', response);
+          alert('Factura cargada exitosamente');
+        }, error => {
+          console.error('Error al cargar factura:', error);
+          alert('Hubo un error al cargar la factura');
+        });
+    } else {
+      alert('Por favor, complete todos los campos.');
+    }
   }
 }
