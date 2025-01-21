@@ -10,19 +10,21 @@ import { ClienteDialogComponent } from './components/clientes/cliente-dialog/cli
 import { ConfirmDialogComponent } from './components/clientes/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
+  declarations: [ClienteDialogComponent,ClientesComponent,FacturaComponent],
+  imports:[  
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ClientesComponent,
-    ClienteDialogComponent,
-    ConfirmDialogComponent
+    
+    ConfirmDialogComponent,MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatButtonModule,
+    MatTableModule,MatInputModule,FacturaComponent,FacturaDetalleComponent,FacturaListComponent
+   
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppModule]
 })
 export class AppModule { }

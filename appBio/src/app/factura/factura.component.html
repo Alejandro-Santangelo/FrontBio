@@ -31,44 +31,19 @@
     </div>
   </div>
 
-  <!-- Línea divisoria -->
-  <hr />
-
-  <!-- Descripción de Consumos -->
-  <div class="detalle-factura">
-    <table>
-      <thead>
-        <tr>
-          <th>Descripción</th>
-          <th>Cantidad</th>
-          <th>Precio Unitario</th>
-          <th>Importe</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Consumo Mensual</td>
-          <td>{{ facturaSeleccionada?.consumoMensual }}</td>
-          <td>{{ facturaSeleccionada?.precioUnitario | currency }}</td>
-          <td>{{ facturaSeleccionada?.consumoMensual * facturaSeleccionada?.precioUnitario | currency }}</td>
-        </tr>
-        <tr>
-          <td>Consumo Total</td>
-          <td>{{ facturaSeleccionada?.consumoTotal }}</td>
-          <td>{{ facturaSeleccionada?.precioUnitario | currency }}</td>
-          <td>{{ facturaSeleccionada?.consumoTotal * facturaSeleccionada?.precioUnitario | currency }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Detalles de la factura -->
+  <div *ngIf="selectedFactura">
+    <h3>Detalles de la Factura</h3>
+    <p><strong>Número:</strong> {{ selectedFactura.numeroFactura }}</p>
+    <p><strong>Fecha de Emisión:</strong> {{ selectedFactura.fechaEmision | date: 'dd/MM/yyyy' }}</p>
+    <p><strong>Fecha de Vencimiento:</strong> {{ selectedFactura.fechaVencimiento | date: 'dd/MM/yyyy' }}</p>
+    <p><strong>Consumo Mensual:</strong> {{ selectedFactura.consumoMensual }} kWh</p>
+    <p><strong>Consumo Total:</strong> {{ selectedFactura.consumoTotal }} kWh</p>
   </div>
 
-  <!-- Línea divisoria -->
-  <hr />
-
-  <!-- Total  -->
-  <div class="total">
-    <div class="total-pagar">
-      <h3>Total a Pagar: {{ facturaSeleccionada?.consumoTotal * facturaSeleccionada?.precioUnitario | currency }}</h3>
-    </div>
+  <!-- Botones de acción -->
+  <div *ngIf="selectedFactura">
+    <button (click)="guardarFactura()">Guardar</button>
+    <button (click)="imprimirFactura()">Imprimir</button>
   </div>
 </div>
