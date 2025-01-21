@@ -1,7 +1,10 @@
 export interface FacturaDto {
-    numeroFactura: string;
+    
+    numeroFactura:number;
     fechaEmision: Date;
     fechaVencimiento: Date;
     consumoMensual: number;
     consumoTotal: number;
+    numeroCliente: number;
+    numeroMedidor: number;
 }

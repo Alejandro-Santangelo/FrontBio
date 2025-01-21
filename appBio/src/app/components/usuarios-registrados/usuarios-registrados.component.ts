@@ -36,9 +36,7 @@ import { FotoPerfilComponent } from '../foto-perfil/foto-perfil.component';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatSnackBarModule,
-    ConfirmDialogComponent,
-    FotoPerfilComponent
+    MatSnackBarModule
   ]
 })
 export class UsuariosRegistradosComponent implements OnInit {

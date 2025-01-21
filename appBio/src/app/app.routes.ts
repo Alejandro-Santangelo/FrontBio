@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { DashBoardComponent } from './Dash/dash-board/dash-board.component';
-import { FacturaComponent } from './factura/factura.component';
+import { FacturaComponent } from './factura/factura.component'; 
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { LoginComponent } from './login/login.component';
@@ -26,6 +26,7 @@ export const routes: Routes = [
     path: 'registro', 
     component: RegistroComponent 
   },
+  
   { 
     path: 'dash', 
     component: DashBoardComponent,
@@ -51,13 +52,15 @@ export const routes: Routes = [
       },
       {
         path: 'factura', 
-        component: FacturaComponent 
+        component: FacturaComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['Manager', 'Administracion'] }
       },
       {
         path: 'clientes',
         component: ClientesComponent,
         canActivate: [RoleGuard],
-        data: { roles: ['Manager'] }
+        data: { roles: ['Manager','Administracion'] }
       },
       {
         path: 'usuarios-registrados',
@@ -74,6 +77,11 @@ export const routes: Routes = [
     ]
   },
   { 
+    path: 'factura', 
+    component: FacturaComponent
+  },
+  
+  { 
     path: 'quienes-somos', 
     component: QuienesSOmos01Component 
   },
@@ -88,5 +96,6 @@ export const routes: Routes = [
   {   
     path: '**', 
     redirectTo: '' 
-  }
+  },
+ 
 ];
