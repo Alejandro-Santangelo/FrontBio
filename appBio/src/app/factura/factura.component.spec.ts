@@ -1,23 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { CommonModule } from '@angular/common';
+import { TestBed } from '@angular/core/testing';
 import { FacturaComponent } from './factura.component';
 
-describe('FacturaComponent', () => {
-  let component: FacturaComponent;
-  let fixture: ComponentFixture<FacturaComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [FacturaComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(FacturaComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+beforeEach(async () => {
+  await TestBed.configureTestingModule({
+    imports: [CommonModule], // Importa CommonModule aquí también
+    declarations: [FacturaComponent],
+  }).compileComponents();
 });

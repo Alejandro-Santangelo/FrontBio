@@ -1,0 +1,8 @@
+/* ...existing code... */
+/* Add a CSS rule */
+.no-select {
+  -ms-user-select: none; /* IE10+ */
+  -webkit-user-select: none;
+  user-select: none; /* Safari 3+, Safari on iOS 3+ */
+}
+/* ...existing code... */
